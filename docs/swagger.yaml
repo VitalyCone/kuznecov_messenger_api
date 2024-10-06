@@ -1,0 +1,189 @@
+definitions:
+  model.Chat:
+    properties:
+      createdTime:
+        type: string
+      id:
+        type: integer
+      user1Id:
+        type: integer
+      user2Id:
+        type: integer
+    type: object
+  model.User:
+    properties:
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /chat:
+    delete:
+      consumes:
+      - application/json
+      description: delete chat
+      parameters:
+      - description: chat id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: delete chat
+      tags:
+      - chat
+    get:
+      consumes:
+      - application/json
+      description: create chat
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      - description: id
+        in: query
+        name: user1_id
+        type: integer
+      - description: id
+        in: query
+        name: user2_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: find chat by id/user1_id/user2_id
+      tags:
+      - chat
+    post:
+      consumes:
+      - application/json
+      description: create chat
+      parameters:
+      - description: new chat data
+        in: body
+        name: chat
+        required: true
+        schema:
+          $ref: '#/definitions/model.Chat'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: create chat
+      tags:
+      - chat
+  /chat/all:
+    get:
+      consumes:
+      - application/json
+      description: get all chats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get all chats
+      tags:
+      - chat
+  /user:
+    delete:
+      consumes:
+      - application/json
+      description: delete user
+      parameters:
+      - description: User id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: delete user
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: get user by id or get all users if id == "" (empty)
+      parameters:
+      - description: User id
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get user by id / get all users
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: Account username
+        in: body
+        name: username
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: create user
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: modify user by id
+      parameters:
+      - description: User
+        in: body
+        name: username
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: modify user by id
+      tags:
+      - user
+swagger: "2.0"
