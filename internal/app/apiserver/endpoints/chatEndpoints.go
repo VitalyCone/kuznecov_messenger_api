@@ -45,7 +45,7 @@ func (ep *Endpoints) CreateChat(g *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {string} Helloworld
-// @Router /chat/all [get]
+// @Router /chats/all [get]
 func (ep *Endpoints) GetAllChats(g *gin.Context) {
 	chats, err := ep.store.Chat().GetAll()
 
@@ -57,61 +57,53 @@ func (ep *Endpoints) GetAllChats(g *gin.Context) {
 }
 
 // PingExample godoc
-// @Summary find chat by id/user1_id/user2_id
+// @Summary Get chat by id
 // @Schemes
-// @Description create chat
+// @Description Get chat by 1
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param id query int false "id"
-// @Param user1_id query int false "id"
-// @Param user2_id query int false "id"
+// @Param id path int false "id"
 // @Success 200 {string} Helloworld
-// @Router /chat [GET]
-func (ep *Endpoints) GetChats(g *gin.Context) {
-	valArray := []string{g.Query("user1_id"), g.Query("user2_id"), g.Query("id")}
+// @Router /chat/{id} [GET]
+func (ep *Endpoints) GetChatById(g *gin.Context){
+	id := g.Param("id")
 
-	if valArray[0] != "" {
-		num, err := strconv.Atoi(valArray[0])
-		if err != nil {
-			g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		}
-		chats, err := ep.store.Chat().GetByChatsUser1Id(num)
-
-		if err != nil {
-			g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		}
-
-		g.JSON(http.StatusOK, chats)
-
-	} else if valArray[1] != "" {
-		num, err := strconv.Atoi(valArray[1])
-		if err != nil {
-			g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		}
-		chats, err := ep.store.Chat().GetByChatsUser2Id(num)
-
-		if err != nil {
-			g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		}
-
-		g.JSON(http.StatusOK, chats)
-
-	} else if valArray[2] != "" {
-		num, err := strconv.Atoi(valArray[2])
-		if err != nil {
-			g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		}
-		chats, err := ep.store.Chat().GetByChatById(num)
-
-		if err != nil {
-			g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		}
-
-		g.JSON(http.StatusOK, chats)
-	} else {
-		g.JSON(http.StatusNotFound, nil)
+	num, err := strconv.Atoi(id)
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
+	chats, err := ep.store.ChatMessage().GetByChatId(num)
+
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	g.JSON(http.StatusOK, chats)
+}
+
+// PingExample godoc
+// @Summary Find chats for user
+// @Schemes
+// @Description Get chats for user
+// @Tags chat
+// @Accept json
+// @Produce json
+// @Param user_id path int false "user_id"
+// @Success 200 {string} Helloworld
+// @Router /chats/{user_id} [GET]
+func (ep *Endpoints) GetChatsForUser(g *gin.Context){
+	id := g.Param("user1_id")
+
+	num, err := strconv.Atoi(id)
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	chats, err := ep.store.Chat().GetByChatsUser1Id(num)
+
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	g.JSON(http.StatusOK, chats)
 }
 
 // PingExample godoc
@@ -121,12 +113,12 @@ func (ep *Endpoints) GetChats(g *gin.Context) {
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param id query integer true "chat id"
+// @Param id path integer true "chat id"
 // @Success 200 {string} Helloworld
-// @Router /chat [delete]
+// @Router /chat/{id} [delete]
 func (ep *Endpoints) DeleteChat(g *gin.Context) {
 
-	id, err := strconv.Atoi(g.Query("id"))
+	id, err := strconv.Atoi(g.Param("id"))
 
 	if err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

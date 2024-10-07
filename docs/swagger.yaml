@@ -10,6 +10,19 @@ definitions:
       user2Id:
         type: integer
     type: object
+  model.ChatMessage:
+    properties:
+      chatid:
+        type: integer
+      createdtime:
+        type: string
+      id:
+        type: integer
+      text:
+        type: string
+      userid:
+        type: integer
+    type: object
   model.User:
     properties:
       id:
@@ -21,53 +34,6 @@ info:
   contact: {}
 paths:
   /chat:
-    delete:
-      consumes:
-      - application/json
-      description: delete chat
-      parameters:
-      - description: chat id
-        in: query
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: delete chat
-      tags:
-      - chat
-    get:
-      consumes:
-      - application/json
-      description: create chat
-      parameters:
-      - description: id
-        in: query
-        name: id
-        type: integer
-      - description: id
-        in: query
-        name: user1_id
-        type: integer
-      - description: id
-        in: query
-        name: user2_id
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: find chat by id/user1_id/user2_id
-      tags:
-      - chat
     post:
       consumes:
       - application/json
@@ -89,7 +55,67 @@ paths:
       summary: create chat
       tags:
       - chat
-  /chat/all:
+  /chat/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete chat
+      parameters:
+      - description: chat id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: delete chat
+      tags:
+      - chat
+    get:
+      consumes:
+      - application/json
+      description: Get chat by 1
+      parameters:
+      - description: id
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Get chat by id
+      tags:
+      - chat
+  /chats/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get chats for user
+      parameters:
+      - description: user_id
+        in: path
+        name: user_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Find chats for user
+      tags:
+      - chat
+  /chats/all:
     get:
       consumes:
       - application/json
@@ -104,36 +130,59 @@ paths:
       summary: get all chats
       tags:
       - chat
-  /user:
+  /message:
+    post:
+      consumes:
+      - application/json
+      description: Create message by id
+      parameters:
+      - description: message
+        in: body
+        name: message
+        schema:
+          $ref: '#/definitions/model.ChatMessage'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create message by id
+      tags:
+      - message
+  /message/{id}:
     delete:
       consumes:
       - application/json
-      description: delete user
+      description: Delete message by id
       parameters:
-      - description: User id
-        in: query
+      - description: id
+        in: path
         name: id
-        required: true
         type: integer
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: delete user
+      responses: {}
+      summary: Delete message by id
       tags:
-      - user
+      - message
     get:
       consumes:
       - application/json
-      description: get user by id or get all users if id == "" (empty)
+      description: Get message by id
       parameters:
-      - description: User id
-        in: query
+      - description: id
+        in: path
         name: id
         type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: Get message by id
+      tags:
+      - message
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: get all users
       produces:
       - application/json
       responses:
@@ -141,7 +190,7 @@ paths:
           description: OK
           schema:
             type: string
-      summary: get user by id / get all users
+      summary: get all users
       tags:
       - user
     post:
@@ -184,6 +233,46 @@ paths:
           schema:
             type: string
       summary: modify user by id
+      tags:
+      - user
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete user
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: delete user
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: get user by id
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get user by id
       tags:
       - user
 swagger: "2.0"

@@ -1,6 +1,8 @@
 package store
 
-import "github.com/VitalyCone/kuznecov_messenger_api/internal/app/model"
+import (
+	"github.com/VitalyCone/kuznecov_messenger_api/internal/app/model"
+)
 
 type ChatMessageRepository struct {
 	store *Store
@@ -23,7 +25,7 @@ func (r *ChatMessageRepository) Get(messageId int) (*model.ChatMessage, error) {
 func (r *ChatMessageRepository) GetByChatId(chatId int) (*[]model.ChatMessage, error) {
 	var messages []model.ChatMessage
 
-	rows, err := r.store.db.Query("SELECT id, user_id, text, created_at FROM chats WHERE chat_id = $1")
+	rows, err := r.store.db.Query("SELECT id, user_id, text, created_at FROM chat_messages WHERE chat_id = $1", chatId)
 
 	if err != nil{
 		return nil, err
@@ -50,7 +52,7 @@ func (r *ChatMessageRepository) GetByChatId(chatId int) (*[]model.ChatMessage, e
 func (r *ChatMessageRepository) Create(m *model.ChatMessage) (*model.ChatMessage, error) {
 	if err := r.store.db.QueryRow(
 		"INSERT INTO chat_messages(chat_id,user_id,text) VALUES($1,$2,$3) RETURNING id, created_at",
-		m.ID, m.CreatedTime).Scan(&m.ID, &m.CreatedTime); err != nil {
+		m.ChatID, m.UserID,m.Text).Scan(&m.ID, &m.CreatedTime); err != nil {
 		return nil, err
 	}
 

@@ -16,47 +16,6 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/chat": {
-            "get": {
-                "description": "create chat",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "chat"
-                ],
-                "summary": "find chat by id/user1_id/user2_id",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "id",
-                        "name": "user1_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "id",
-                        "name": "user2_id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "create chat",
                 "consumes": [
@@ -88,6 +47,37 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/chat/{id}": {
+            "get": {
+                "description": "Get chat by 1",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Get chat by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             },
             "delete": {
                 "description": "delete chat",
@@ -106,7 +96,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "chat id",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -120,7 +110,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/chat/all": {
+        "/chats/all": {
             "get": {
                 "description": "get all chats",
                 "consumes": [
@@ -143,9 +133,112 @@ const docTemplate = `{
                 }
             }
         },
+        "/chats/{user_id}": {
+            "get": {
+                "description": "Get chats for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chat"
+                ],
+                "summary": "Find chats for user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/message": {
+            "post": {
+                "description": "Create message by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message"
+                ],
+                "summary": "Create message by id",
+                "parameters": [
+                    {
+                        "description": "message",
+                        "name": "message",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/model.ChatMessage"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/message/{id}": {
+            "get": {
+                "description": "Get message by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message"
+                ],
+                "summary": "Get message by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "Delete message by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "message"
+                ],
+                "summary": "Delete message by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/user": {
             "get": {
-                "description": "get user by id or get all users if id == \"\" (empty)",
+                "description": "get all users",
                 "consumes": [
                     "application/json"
                 ],
@@ -155,15 +248,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "get user by id / get all users",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User id",
-                        "name": "id",
-                        "in": "query"
-                    }
-                ],
+                "summary": "get all users",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -236,6 +321,37 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "description": "get user by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "get user by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User id",
+                        "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             },
             "delete": {
                 "description": "delete user",
@@ -254,7 +370,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "User id",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -283,6 +399,26 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "user2Id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.ChatMessage": {
+            "type": "object",
+            "properties": {
+                "chatid": {
+                    "type": "integer"
+                },
+                "createdtime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "userid": {
                     "type": "integer"
                 }
             }

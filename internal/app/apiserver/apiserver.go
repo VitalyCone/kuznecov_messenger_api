@@ -66,16 +66,25 @@ func (s *APIServer) configureEndpoints() {
 		userPath := path.Group("user")
 		{
 			userPath.POST("/", endpoint.CreateUser)
-			userPath.DELETE("/", endpoint.DeleteUser)
-			userPath.GET("/", endpoint.GetUsers)
+			userPath.DELETE("/:id", endpoint.DeleteUser)
+			userPath.GET("/:id", endpoint.GetUser)
+			userPath.GET("/", endpoint.GetAllUsers)
 			userPath.PUT("/", endpoint.ModifyUser)
 		}
 		chatPath := path.Group("chat")
 		{
-			chatPath.GET("/all", endpoint.GetAllChats)
-			chatPath.GET("/", endpoint.GetChats)
+			chatPath.GET("/:id", endpoint.GetChatById)
 			chatPath.POST("/", endpoint.CreateChat)
-			chatPath.DELETE("/", endpoint.DeleteChat)
+			chatPath.DELETE("/:id", endpoint.DeleteChat)
+		}
+		path.GET("chats/all", endpoint.GetAllChats)
+		path.GET("chats/:user_id", endpoint.GetChatsForUser)
+
+		messagePath := path.Group("message")
+		{
+			messagePath.GET("/:id", endpoint.GetMessage)
+			messagePath.POST("/", endpoint.CreateMessage)
+			messagePath.DELETE("/:id", endpoint.DeleteMessage)
 		}
 	}
 
