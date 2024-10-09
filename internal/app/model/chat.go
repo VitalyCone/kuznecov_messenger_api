@@ -3,8 +3,8 @@ package model
 import "time"
 
 type Chat struct {
-	ID          int
-	User1Id     int
-	User2Id     int
-	CreatedTime time.Time
+	ID          int       `json:"id"`
+	User1       User      `json:"user1"`
+	User2       User      `json:"user2"`
+	CreatedTime time.Time `json:"created_time"`
 }

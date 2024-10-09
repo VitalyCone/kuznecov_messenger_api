@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/VitalyCone/kuznecov_messenger_api/internal/app/model"
+	"github.com/VitalyCone/kuznecov_messenger_api/internal/app/apiserver/dtos"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,15 +18,15 @@ import (
 // @Param id path int false "id"
 // @Router /message/{id} [GET]
 func (ep *Endpoints) GetMessage(g *gin.Context) {
-	id,err := strconv.Atoi(g.Query("id"))
+	id, err := strconv.Atoi(g.Param("id"))
 
-	if err!= nil{
-		g.JSON(http.StatusBadRequest, gin.H{"error" : error.Error(err)})
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": error.Error(err)})
 	}
 
 	message, err := ep.store.ChatMessage().Get(id)
 
-	if err!= nil{
+	if err != nil {
 		g.JSON(http.StatusNotFound, nil)
 	}
 
@@ -40,20 +40,26 @@ func (ep *Endpoints) GetMessage(g *gin.Context) {
 // @Tags message
 // @Accept json
 // @Produce json
-// @Param message body model.ChatMessage false "message"
+// @Param message body dtos.CreateChatMessageDto false "message"
 // @Router /message [POST]
 func (ep *Endpoints) CreateMessage(g *gin.Context) {
-	var newMessage model.ChatMessage
+	var newMessage dtos.CreateChatMessageDto
 
 	err := g.BindJSON(&newMessage)
 	if err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	modelMessage, err := newMessage.CreateChatMessageDtoToModel(ep.store)
 
-	message, err := ep.store.ChatMessage().Create(&newMessage)
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	if err!= nil{
+	message, err := ep.store.ChatMessage().Create(modelMessage)
+
+	if err != nil {
 		g.JSON(http.StatusNotFound, nil)
 	}
 
@@ -70,13 +76,13 @@ func (ep *Endpoints) CreateMessage(g *gin.Context) {
 // @Param id path int false "id"
 // @Router /message/{id} [DELETE]
 func (ep *Endpoints) DeleteMessage(g *gin.Context) {
-	id,err := strconv.Atoi(g.Query("id"))
+	id, err := strconv.Atoi(g.Param("id"))
 
-	if err!= nil{
-		g.JSON(http.StatusBadRequest, gin.H{"error" : error.Error(err)})
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": error.Error(err)})
 	}
 
-	if err := ep.store.ChatMessage().Delete(id); err!= nil{
+	if err := ep.store.ChatMessage().Delete(id); err != nil {
 		g.JSON(http.StatusNotFound, nil)
 	}
 

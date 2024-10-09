@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Chat"
+                            "$ref": "#/definitions/dtos.CreateChatDto"
                         }
                     }
                 ],
@@ -183,7 +183,7 @@ const docTemplate = `{
                         "name": "message",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/model.ChatMessage"
+                            "$ref": "#/definitions/dtos.CreateChatMessageDto"
                         }
                     }
                 ],
@@ -273,11 +273,11 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "User",
-                        "name": "username",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/dtos.ModifyUserDto"
                         }
                     }
                 ],
@@ -309,7 +309,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/dtos.CreateUserDto"
                         }
                     }
                 ],
@@ -386,44 +386,40 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Chat": {
+        "dtos.CreateChatDto": {
             "type": "object",
             "properties": {
-                "createdTime": {
-                    "type": "string"
-                },
-                "id": {
+                "user1_id": {
                     "type": "integer"
                 },
-                "user1Id": {
-                    "type": "integer"
-                },
-                "user2Id": {
+                "user2_id": {
                     "type": "integer"
                 }
             }
         },
-        "model.ChatMessage": {
+        "dtos.CreateChatMessageDto": {
             "type": "object",
             "properties": {
-                "chatid": {
-                    "type": "integer"
-                },
-                "createdtime": {
-                    "type": "string"
-                },
-                "id": {
+                "chat": {
                     "type": "integer"
                 },
                 "text": {
                     "type": "string"
                 },
-                "userid": {
+                "user": {
                     "type": "integer"
                 }
             }
         },
-        "model.User": {
+        "dtos.CreateUserDto": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos.ModifyUserDto": {
             "type": "object",
             "properties": {
                 "id": {

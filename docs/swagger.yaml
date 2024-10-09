@@ -1,29 +1,26 @@
 definitions:
-  model.Chat:
+  dtos.CreateChatDto:
     properties:
-      createdTime:
-        type: string
-      id:
+      user1_id:
         type: integer
-      user1Id:
-        type: integer
-      user2Id:
+      user2_id:
         type: integer
     type: object
-  model.ChatMessage:
+  dtos.CreateChatMessageDto:
     properties:
-      chatid:
-        type: integer
-      createdtime:
-        type: string
-      id:
+      chat:
         type: integer
       text:
         type: string
-      userid:
+      user:
         type: integer
     type: object
-  model.User:
+  dtos.CreateUserDto:
+    properties:
+      username:
+        type: string
+    type: object
+  dtos.ModifyUserDto:
     properties:
       id:
         type: integer
@@ -44,7 +41,7 @@ paths:
         name: chat
         required: true
         schema:
-          $ref: '#/definitions/model.Chat'
+          $ref: '#/definitions/dtos.CreateChatDto'
       produces:
       - application/json
       responses:
@@ -140,7 +137,7 @@ paths:
         in: body
         name: message
         schema:
-          $ref: '#/definitions/model.ChatMessage'
+          $ref: '#/definitions/dtos.CreateChatMessageDto'
       produces:
       - application/json
       responses: {}
@@ -203,7 +200,7 @@ paths:
         name: username
         required: true
         schema:
-          $ref: '#/definitions/model.User'
+          $ref: '#/definitions/dtos.CreateUserDto'
       produces:
       - application/json
       responses:
@@ -221,10 +218,10 @@ paths:
       parameters:
       - description: User
         in: body
-        name: username
+        name: user
         required: true
         schema:
-          $ref: '#/definitions/model.User'
+          $ref: '#/definitions/dtos.ModifyUserDto'
       produces:
       - application/json
       responses:

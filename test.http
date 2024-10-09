@@ -13,5 +13,5 @@ Accept: application/json
 
 ###
 
-GET http://localhost:8080/messenger/user/:id?id=5
+GET http://localhost:8080/messenger/chats/all
 Accept: application/json

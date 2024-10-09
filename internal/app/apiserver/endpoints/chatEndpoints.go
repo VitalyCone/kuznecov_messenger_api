@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/VitalyCone/kuznecov_messenger_api/internal/app/model"
+	"github.com/VitalyCone/kuznecov_messenger_api/internal/app/apiserver/dtos"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,11 +15,11 @@ import (
 // @Tags chat
 // @Accept json
 // @Produce json
-// @Param chat body model.Chat true "new chat data"
+// @Param chat body dtos.CreateChatDto true "new chat data"
 // @Success 200 {string} Helloworld
 // @Router /chat [post]
 func (ep *Endpoints) CreateChat(g *gin.Context) {
-	var newChat model.Chat
+	var newChat dtos.CreateChatDto
 
 	err := g.BindJSON(&newChat)
 	if err != nil {
@@ -27,7 +27,14 @@ func (ep *Endpoints) CreateChat(g *gin.Context) {
 		return
 	}
 
-	chat, err := ep.store.Chat().Create(&newChat)
+	modelChat,err := newChat.CreateChatDtoToModel(ep.store)
+
+	if err != nil{
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	chat, err := ep.store.Chat().Create(modelChat)
 
 	if err != nil {
 		g.JSON(http.StatusBadRequest, err)
@@ -92,7 +99,7 @@ func (ep *Endpoints) GetChatById(g *gin.Context){
 // @Success 200 {string} Helloworld
 // @Router /chats/{user_id} [GET]
 func (ep *Endpoints) GetChatsForUser(g *gin.Context){
-	id := g.Param("user1_id")
+	id := g.Param("user_id")
 
 	num, err := strconv.Atoi(id)
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/VitalyCone/kuznecov_messenger_api/internal/app/apiserver/dtos"
 	"github.com/VitalyCone/kuznecov_messenger_api/internal/app/model"
 	"github.com/gin-gonic/gin"
 )
@@ -15,18 +16,18 @@ import (
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param username body model.User true "Account username"
+// @Param username body dtos.CreateUserDto true "Account username"
 // @Success 200 {string} Helloworld
 // @Router /user [post]
 func (ep *Endpoints)CreateUser(g *gin.Context){
-	var newUser model.User
+	var newUser dtos.CreateUserDto
 
 	err := g.BindJSON(&newUser); if err!= nil{
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	user, err := ep.store.User().Create(&newUser)
+	user, err := ep.store.User().Create(newUser.CreateUserDtoToModel())
 
 	if err != nil{
 		g.JSON(http.StatusNoContent, err)
@@ -119,18 +120,18 @@ func (ep *Endpoints)GetAllUsers(g *gin.Context){
 // @Tags user
 // @Accept json
 // @Produce json
-// @Param username body model.User true "User"
+// @Param user body dtos.ModifyUserDto true "User"
 // @Success 200 {string} Helloworld
 // @Router /user [put]
 func (ep *Endpoints)ModifyUser(g *gin.Context){
-	var modUser model.User
+	var modUser dtos.ModifyUserDto
 
 	if err := g.BindJSON(&modUser); err!= nil{
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := ep.store.User().ModifyUser(&modUser); err != nil{
+	if err := ep.store.User().ModifyUser(modUser.ModifyUserDtoToModel()); err != nil{
 		g.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}

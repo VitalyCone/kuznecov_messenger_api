@@ -1,11 +1,13 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type ChatMessage struct {
 	ID          int       `json:"id"`
-	ChatID      int       `json:"chatid"`
-	UserID      int       `json:"userid"`
+	Chat        Chat      `json:"chat"`
+	User        User      `json:"user"`
 	Text        string    `json:"text"`
-	CreatedTime time.Time `json:"createdtime"`
+	CreatedTime time.Time `json:"created_time"`
 }
